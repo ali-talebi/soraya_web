@@ -1,0 +1,675 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+	<title>  {{ event.event_name }} </title>
+
+	<!-- Meta Tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="">
+	<meta name="description" content="{{ event.event_name }}">
+
+	<!-- Dark mode -->
+	<script>
+		const storedTheme = localStorage.getItem('theme')
+ 
+		const getPreferredTheme = () => {
+			if (storedTheme) {
+				return storedTheme
+			}
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+		}
+
+		const setTheme = function (theme) {
+			if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+				document.documentElement.setAttribute('data-bs-theme', 'dark')
+			} else {
+				document.documentElement.setAttribute('data-bs-theme', theme)
+			}
+		}
+
+		setTheme(getPreferredTheme())
+
+		window.addEventListener('DOMContentLoaded', () => {
+		    var el = document.querySelector('.theme-icon-active');
+			if(el != 'undefined' && el != null) {
+				const showActiveTheme = theme => {
+				const activeThemeIcon = document.querySelector('.theme-icon-active use')
+				const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+				const svgOfActiveBtn = btnToActive.querySelector('.mode-switch use').getAttribute('href')
+
+				document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+					element.classList.remove('active')
+				})
+
+				btnToActive.classList.add('active')
+				activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+			}
+
+			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+				if (storedTheme !== 'light' || storedTheme !== 'dark') {
+					setTheme(getPreferredTheme())
+				}
+			})
+
+			showActiveTheme(getPreferredTheme())
+
+			document.querySelectorAll('[data-bs-theme-value]')
+				.forEach(toggle => {
+					toggle.addEventListener('click', () => {
+						const theme = toggle.getAttribute('data-bs-theme-value')
+						localStorage.setItem('theme', theme)
+						setTheme(theme)
+						showActiveTheme(theme)
+					})
+				})
+
+			}
+		})
+		
+	</script>
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="assets/images/favicon.ico">
+
+	<!-- Plugins CSS -->
+	<link rel="stylesheet" type="text/css" href="{% static 'account/assets/vendor/font-awesome/css/all.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'account/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}">
+
+	<!-- Theme CSS -->
+	<link rel="stylesheet" type="text/css" href="{% static 'account/assets/css/style-rtl.css' %}">
+
+</head>
+
+<body>
+
+<!-- Header START -->
+    {% include 'home/header.html' %}
+<!-- Header END -->
+
+<!-- **************** MAIN CONTENT START **************** -->
+<main>
+<!-- =======================
+Main banner START -->
+<section class="pt-0">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<!-- Card item START -->
+				<div class="card overflow-hidden h-400px h-xl-600px rounded-3" style="background-image:url('{{ event.picture.url }}'); background-position: center left; background-size: cover;">
+					<!-- Background dark overlay -->
+					<div class="bg-overlay bg-dark opacity-6"></div>
+					
+					<!-- Card image overlay -->
+					<div class="card-img-overlay d-flex align-items-start flex-column">
+						<!-- Card overlay Top -->
+						<div class="w-100 mb-auto d-flex justify-content-end">
+							<button class="btn btn-sm btn-white mb-0"><i class="bi bi-share"></i> اشتراک گذاری</button>
+						</div>
+						<!-- Card overlay bottom -->
+						<div class="w-100 mt-auto">
+							<div class="row p-0 p-sm-3">
+								<div class="col-11 col-lg-7">
+									<!-- Title -->
+									<h1 class="text-white fs-4">{{ event.event_name }}</h1>
+									<p class="text-white mb-0">
+
+                                    {{ event.event_description }}
+                                    </p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Card item END -->
+			</div>
+		</div>
+	</div>
+</section>
+<!-- =======================
+Main banner END -->
+
+<!-- =======================
+Page content START -->
+<section class="pt-0">
+	<div class="container">
+		<div class="row g-4 g-lg-5">
+				
+			<!-- Main content START -->
+			<div class="col-lg-8 order-2">
+				<!-- Organization and time -->
+				<div class="bg-light rounded-3 p-3 mb-4">
+					<div class="row g-4">
+						<!-- Organization -->
+						<div class="col-md-4">
+							<h6 class="small">سازماندهی شده توسط:</h6>
+							<div class="d-flex align-items-center">
+								<!-- Avatar -->
+								<div class="avatar align-middle">
+									<div class="avatar-img rounded-1 bg-danger"><span class="text-white position-absolute top-50 start-50 translate-middle fw-bold">ZC</span></div>
+								</div>
+								<!-- Info -->
+								<div class="ms-2">
+									<h6 class="mb-0 fw-normal">{{ event.creator }}</h6>
+									<small>2.4k دنبال کننده</small>
+								</div>
+							</div>
+						</div>
+
+						<!-- Location -->
+						<div class="col-md-4">
+							<h6 class="small">آدرس:</h6>
+							<div class="d-flex align-items-center">
+								<!-- Avatar -->
+								<div class="avatar align-middle flex-shrink-0">
+									<div class="avatar-img rounded-2 bg-dark">
+										<span class="position-absolute top-50 start-50 translate-middle text-white"><i class="bi bi-geo-alt-fill"></i></span>
+									</div>
+								</div>
+								<h6 class="fw-normal mb-0 ms-2">{{ event.address }}</h6>
+							</div>
+						</div>
+
+						<!-- Date & Time -->
+						<div class="col-md-4">
+							<h6 class="small">تاریخ و زمان</h6>
+							<div class="d-flex align-items-center">
+								<!-- Avatar -->
+								<div class="avatar align-middle flex-shrink-0">
+									<div class="avatar-img rounded-2 bg-dark">
+										<span class="position-absolute top-50 start-50 translate-middle text-white"><i class="bi bi-calendar-fill"></i></span>
+									</div>
+								</div>
+								<div class="ms-2">
+									<h6 class="fw-normal mb-0"> {{ event.date }}  </h6>
+									<small>9 صبح تا 7 بعد از ظهر</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Content -->
+				<h4 class="fs-5 ff-vb">در مورد این رویداد</h4>
+
+                <p>
+                    {{ event.text|safe }}
+                </p>
+
+				<!-- Speakers -->
+				<h4 class="mt-4 mb-0 fs-5 ff-vb">راهنمایان</h4>
+				<p>برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+
+
+                <!-- Speaker list START -->
+				<div class="row g-4">
+					<!-- Speaker item -->
+					<div class="col-sm-6">
+						<div class="card card-body border">
+							<div class="d-xl-flex justify-content-between align-items-center">
+								<!-- Avatar and info -->
+								<div class="hstack gap-2 mb-2 mb-xl-0">
+									<!-- Avatar -->
+									<div class="avatar flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="{{ event.guidance_1.picture.url }}" alt="avatar">
+									</div>
+									<!-- Info -->
+									<div>
+										<!-- Avatar -->
+										<h6 class="card-title mb-0"><a href="#"> {{ event.guidance_1 }}</a></h6>
+										<small>2.5M دنبال کننده</small>
+									</div>
+								</div>
+
+								<!-- Button -->
+								<button class="btn btn-sm btn-dark mb-0">اطلاعات بیشتر</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- Speaker item -->
+					<div class="col-sm-6">
+						<div class="card card-body border">
+							<div class="d-xl-flex justify-content-between align-items-center">
+								<!-- Avatar and info -->
+								<div class="hstack gap-2 mb-2 mb-xl-0">
+									<!-- Avatar -->
+									<div class="avatar flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="{{ event.guidance_2.picture.url }}" alt="avatar">
+									</div>
+									<!-- Info -->
+									<div>
+										<!-- Avatar -->
+										<h6 class="card-title mb-0"><a href="#"> {{ event.guidance_2 }}</a></h6>
+										<small>40K دنبال کننده</small>
+									</div>
+								</div>
+
+								<!-- Button -->
+								<button class="btn btn-sm btn-dark mb-0">اطلاعات بیشتر
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Speaker list END -->
+
+				<h4 class="mt-5 mb-0 fs-5 ff-vb">برنامه زمانبندی رویداد</h4>
+				<p>برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+				<!-- Schedule START -->
+				<div class="accordion accordion-icon accordion-active-dark" id="accordionExample2">
+					<!-- Item -->
+					<div class="accordion-item mb-3">
+						<h6 class="accordion-header font-base" id="heading-1">
+							<button class="accordion-button fw-bold rounded d-sm-flex d-inline-block collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+								روز-1
+								<span class="fw-normal ms-0 ms-sm-2">(چهارشنبه، 1 بهمن)</span> 
+							</button>
+						</h6>
+						<div id="collapse-1" class="accordion-collapse collapse show" aria-labelledby="heading-1" data-bs-parent="#accordionExample2">
+							<div class="accordion-body p-0">
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">افتتاحیه <span>(8:00)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">الهام حسینی</a> مدرس دانشگاه شریف</p>
+									</div>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/02.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">روشهای مهندسی نوین <span>(9:00)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">مهدی علیزاده</a> مدیرعامل شرکت نوین</p>
+									</div>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="text-center p-3">
+									<h6 class="mb-0 fw-normal"><i class="bi bi-clock"></i> زمان استراحت <span>(10:00)</span></h6>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">تکامل تجربه کاربری <span>(10:30)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">سعید افخمی</a> موسس و <a href="#" class="fw-bold text-body text-primary-hover">مهراد نوری</a> مدیرعامل</p>
+									</div>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">برنامه های کاربردی وب <span>(2:00)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">نیلوفر راد</a> برنامه نویس</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Item -->
+					<div class="accordion-item mb-3">
+						<h6 class="accordion-header font-base" id="heading-2">
+							<button class="accordion-button fw-bold collapsed rounded d-sm-flex d-inline-block" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
+								روز-2
+								<span class="fw-normal ms-0 ms-sm-2">(پنجشنبه، 2 بهمن)</span>  
+							</button>
+						</h6>
+						<div id="collapse-2" class="accordion-collapse collapse" aria-labelledby="heading-2" data-bs-parent="#accordionExample2">
+							<!-- Accordion body START -->
+							<div class="accordion-body p-0">
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">Top Query - بخش اول <span>(8:00)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">حامد مرادی</a> برنامه نویس وب</p>
+									</div>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">نوآوری های جهانی در رسانه <span>(9:30)</span></a></h6> 
+										<p class="small mb-0">توسط <a href="#" class="fw-bold text-body text-primary-hover">لیندا محمدی</a> طراح سایت</p>
+									</div>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="text-center p-3">
+									<h6 class="mb-0 fw-normal"><i class="bi bi-clock"></i> زمان استراحت <span>(10:00)</span></h6>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">امنیت در شبکه <span>(10:30)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">لیلا حاتمی</a> کارشناس بازاریابی</p>
+									</div>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="text-center p-3">
+									<h6 class="mb-0 fw-normal"><i class="bi bi-clock"></i> زمان ناهار <span>(1:00)</span></h6>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/08.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">اقتصاد دیجیتال <span>(2:00)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">پوریا تقی زاده</a> فناوری وب</p>
+									</div>
+								</div>
+							</div>
+							<!-- Accordion body END -->
+						</div>
+					</div>
+
+					<!-- Item -->
+					<div class="accordion-item mb-3">
+						<h6 class="accordion-header font-base" id="heading-3">
+							<button class="accordion-button fw-bold collapsed rounded d-sm-flex d-inline-block" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+								روز-3
+								<span class="fw-normal ms-0 ms-sm-2">(جمعه، 3 بهمن)</span> 
+							</button>
+						</h6>
+						<div id="collapse-3" class="accordion-collapse collapse" aria-labelledby="heading-3" data-bs-parent="#accordionExample2">
+							<!-- Accordion body START -->
+							<div class="accordion-body p-0">
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">Top Query - بخش اول <span>(8:00)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">حامد مرادی</a> برنامه نویس وب</p>
+									</div>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/05.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">نوآوری های جهانی در رسانه <span>(9:30)</span></a></h6> 
+										<p class="small mb-0">توسط <a href="#" class="fw-bold text-body text-primary-hover">لیندا محمدی</a> طراح سایت</p>
+									</div>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="text-center p-3">
+									<h6 class="mb-0 fw-normal"><i class="bi bi-clock"></i> زمان استراحت <span>(10:00)</span></h6>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">امنیت در شبکه<span>(10:30)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">لیلا حاتمی</a> کارشناس بازاریابی</p>
+									</div>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="text-center p-3">
+									<h6 class="mb-0 fw-normal"><i class="bi bi-clock"></i> زمان ناهار <span>(1:00)</span></h6>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/08.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">اقتصاد دیجیتال <span>(2:00)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">پوریا تقی زاده</a> فناوری وب</p>
+									</div>
+								</div>
+							</div>
+							<!-- Accordion body END -->
+						</div>
+					</div>
+
+					<!-- Item -->
+					<div class="accordion-item mb-3">
+						<h6 class="accordion-header font-base" id="heading-6">
+							<button class="accordion-button fw-bold collapsed rounded d-block d-sm-flex d-inline-block" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-6" aria-expanded="false" aria-controls="collapse-6">
+								روز-4 
+								<span class="fw-normal ms-0 ms-sm-2">(شنبه - 4 بهمن)</span> 
+							</button>
+						</h6>
+						<div id="collapse-6" class="accordion-collapse collapse" aria-labelledby="heading-6" data-bs-parent="#accordionExample2">
+							<!-- Accordion body START -->
+							<div class="accordion-body p-0">
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/01.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">افتتاحیه <span>(8:00)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">الهام حسینی</a> مدرس دانشگاه شریف</p>
+									</div>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/02.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">روشهای مهندسی نوین <span>(9:00)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">مهدی علیزاده</a> مدیرعامل شرکت نوین</p>
+									</div>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="text-center p-3">
+									<h6 class="mb-0 fw-normal"><i class="bi bi-clock"></i> زمان استراحت <span>(10:00)</span></h6>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm flex-shrink-0">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/04.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">تکامل تجربه کاربری <span>(10:30)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">سعید افخمی</a> موسس و <a href="#" class="fw-bold text-body text-primary-hover">مهراد نوری</a> مدیرعامل </p>
+									</div>
+								</div>
+
+								<hr class="my-0"> <!-- Divider -->
+
+								<!-- Item -->
+								<div class="d-flex align-items-center p-3">
+									<!-- Avatar -->
+									<div class="avatar avatar-sm">
+										<img class="avatar-img rounded-circle" src="assets/images/avatar/06.jpg" alt="avatar">
+									</div>
+									<!-- Content -->
+									<div class="ms-2">
+										<h6 class="mb-0 fw-normal"><a href="#">برنامه های کاربردی وب <span>(2:00)</span></a></h6> 
+										<p class="small mb-0">با <a href="#" class="fw-bold text-body text-primary-hover">نیلوفر راد</a> برنامه نویس</p>
+									</div>
+								</div>
+							</div>
+							<!-- Accordion body END -->
+						</div>	
+					</div>
+				</div>	
+				<!-- Schedule END -->
+
+				<!-- Counter -->
+				<div class="card card-body bg-light p-4 mt-5">
+					<div class="row g-2">
+						<div class="col-sm-4">
+							<!-- Visitors -->
+							<div class="d-flex">
+								<i class="bi bi-globe fs-4"></i>
+								<div class="ms-3">
+									<h5 class="mb-0">125</h5>
+									<p class="mb-0">بازدید کنندگان</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<!-- Registered -->
+							<div class="d-flex">
+								<i class="bi bi-person-plus fs-4"></i>
+								<div class="ms-3">
+									<h5 class="mb-0">356</h5>
+									<p class="mb-0">شرکت کنندگان</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<!-- Attendance -->
+							<div class="d-flex">
+								<i class="bi bi-people fs-4"></i>
+								<div class="ms-3">
+									<h5 class="mb-0">350</h5>
+									<p class="mb-0">بینندگان</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+      </div>
+			<!-- Main content END -->
+
+			<!-- Left sidebar START -->
+			<div class="col-lg-4 order-1 order-lg-2">
+				<div class="card card-body shadow">
+					<a class="btn btn-primary w-100" href="#"> خرید بلیط </a>
+					<div class="mt-4">
+						<ul class="list-unstyled mb-4">
+							<li class="d-flex justify-content-between mb-3"> <span class="w-150px">قیمت بلیط:</span> <h6 class="text-end mb-0"> {{ event.price }} تومان </h6></li>
+							<li class="d-flex justify-content-between mb-3"> <span class="w-150px">آدرس:</span> <h6 class="text-end mb-0"> {{ event.address }} </h6></li>
+						</ul> 
+						<iframe class="w-100 d-block rounded-bottom" height="230" src="{{ event.frame }}" style="border:0;" aria-hidden="false" tabindex="0"></iframe>
+					</div>
+				</div>
+			</div>
+			<!-- Left sidebar END -->
+
+		</div><!-- Row END -->
+	</div>
+</section>
+<!-- =======================
+Page content END -->
+
+</main>
+<!-- **************** MAIN CONTENT END **************** -->
+
+<!-- =======================
+Footer START -->
+    {% include 'home/footer.html' %}
+<!-- =======================
+Footer END -->
+
+<!-- Back to top -->
+<div class="back-top"><i class="bi bi-arrow-up-short position-absolute top-50 start-50 translate-middle"></i></div>
+
+<!-- Bootstrap JS -->
+<script src="{% static 'account/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Template Functions -->
+<script src="{% static 'account/assets/js/functions.js' %}"></script>
+
+</body>
+
+</html>

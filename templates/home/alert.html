@@ -1,0 +1,18 @@
+{% load static %}
+{% if messages %}
+    {% for msg in messages %}
+            <div class="container">
+                <div class="alert alert-success alert-dismissible d-flex justify-content-between align-items-center fade show mt-2 mb-0 rounded-3 pe-2" role="alert">
+                    <div>
+                        <!-- Avatar -->
+                        <div class="avatar avatar-xs me-2">
+                            <img class="avatar-img rounded-circle"  src="{%  static  'account/assets/images/logo.jpg' %}" alt="avatar">
+                        </div>
+                        <!-- Info -->
+                            <p>{{ msg }}</p>
+                    </div>
+                    <button type="button" class="btn btn-link text-primary-hover mb-0 text-end" data-bs-dismiss="alert" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+                </div>
+            </div>
+    {% endfor %}
+{% endif %}
